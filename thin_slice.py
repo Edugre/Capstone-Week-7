@@ -72,21 +72,29 @@ def compare(actual, expected):
     return matched, total
 
 
-start = time.perf_counter()
+test_cases = [
+    ("Test Case 1", "patient_fixture.csv", "expected_report.csv"),
+    ("Test Case 2", "patient_data_2.csv", "expected_report_2.csv")
+]
 
-patients = load_patients("patient_fixture.csv")
-actual_report = build_report(patients)
-expected_report = load_expected("expected_report.csv")
+for name, patient_file, expected_file in test_cases:
+    print(f"\n========== {name} ==========")
 
-matched, total = compare(actual_report, expected_report)
+    start = time.perf_counter()
 
-elapsed_ms = (time.perf_counter() - start) * 1000
-accuracy = matched / total * 100
+    patients = load_patients(patient_file)
+    actual_report = build_report(patients)
+    expected_report = load_expected(expected_file)
 
-print("\n--- MEASUREMENT ---")
-print(f"Patient records: {len(patients)}")
-print(f"Values matched: {matched}/{total}")
-print(f"Report accuracy: {accuracy:.1f}%")
-print(f"Runtime: {elapsed_ms:.3f} ms")
-print(f"Python: {platform.python_version()}")
-print(f"Machine: {platform.platform()}")
+    matched, total = compare(actual_report, expected_report)
+
+    elapsed_ms = (time.perf_counter() - start) * 1000
+    accuracy = matched / total * 100
+
+    print("\n--- MEASUREMENT ---")
+    print(f"Patient records: {len(patients)}")
+    print(f"Values matched: {matched}/{total}")
+    print(f"Report accuracy: {accuracy:.1f}%")
+    print(f"Runtime: {elapsed_ms:.3f} ms")
+    print(f"Python: {platform.python_version()}")
+    print(f"Machine: {platform.platform()}")
